@@ -18,7 +18,7 @@ class MendeleyRetriever:
                 for paper in papers.iter():
                     # Extract relevant metadata
                     title = paper.title
-                    authors = ', '.join([author['name'] for author in paper.authors])
+                    authors = ', '.join([author.name for author in paper.authors])
                     abstract = paper.abstract
                     altmetric_score = paper.scores.get('altmetric_score')
 
