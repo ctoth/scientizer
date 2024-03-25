@@ -9,3 +9,4 @@ openai
 mendeley
 pytest
 pytest-mock
+anthropic

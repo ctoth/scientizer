@@ -7,7 +7,6 @@ Phase 1: Core System Development
    - Set up a distributed project structure using Python packages:
      - `retrievers`: Package for paper retrieval modules.
      - `datastore`: Package for database and data storage modules.
-     - `extractors`: Package for abstract extraction modules.
      - `detectors`: Package for AI scoring modules.
      - `rankers`: Package for paper ranking modules.
      - `ui`: Package for user interface modules.
@@ -88,21 +87,7 @@ Phase 1: Core System Development
      Session = sessionmaker(bind=engine)
      ```
 
-1.4 Extractors Package:
-   - Implement the abstract extractor module (`abstract_extractor.py`):
-     ```python
-     import PyPDF2
-     
-     def extract_abstract(file_path):
-         with open(file_path, 'rb') as file:
-             reader = PyPDF2.PdfFileReader(file)
-             page = reader.getPage(0)
-             text = page.extractText()
-             # Extract the abstract from the text
-             # Return the extracted abstract
-     ```
-
-1.5 Detectors Package:
+1.4 Detectors Package:
    - Create the `AIScorer` base class and implement `OpenAIScorer` and `AnthropicScorer` classes:
      ```python
      from abc import ABC, abstractmethod
@@ -146,7 +131,7 @@ Phase 1: Core System Development
      Provide a brief explanation for your score, highlighting the specific errors or contradictions you identified in the abstract. If you find no significant issues, assign a low score and explain why the abstract appears to be sound.
      ```
 
-1.6 Rankers Package:
+1.5 Rankers Package:
    - Implement the paper ranker module (`paper_ranker.py`):
      ```python
      def rank_papers(papers):
@@ -155,7 +140,7 @@ Phase 1: Core System Development
          # Return the ranked list of papers
      ```
 
-1.7 User Interface:
+1.6 User Interface:
    - Design and implement the web application using a web framework like Flask or Django.
    - Create views and templates for displaying ranked papers, search functionality, and user authentication.
 
