@@ -1,11 +1,12 @@
 import requests
 from mendeley import Mendeley
 from datastore.database import Session, Paper
+import os
 from datetime import datetime
 
 class MendeleyRetriever:
     def __init__(self, client_id, client_secret):
-        self.mendeley = Mendeley(client_id, client_secret)
+        self.mendeley = Mendeley(os.environ.get('MENDELEY_CLIENT_ID'), os.environ.get('MENDELEY_CLIENT_SECRET'))
         self.session = self.mendeley.start_client_credentials_flow().authenticate()
 
     def retrieve_papers(self, query):
@@ -37,5 +38,5 @@ class MendeleyRetriever:
         db_session.close()
 
 # Example usage:
-# retriever = MendeleyRetriever(client_id='your_client_id', client_secret='your_client_secret')
+# retriever = MendeleyRetriever()
 # retriever.retrieve_papers('machine learning')
