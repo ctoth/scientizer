@@ -1,12 +1,12 @@
 import requests
 from mendeley import Mendeley
 from datastore.database import Session, Paper
-import os
+from decouple import config
 from datetime import datetime
 
 class MendeleyRetriever:
-    def __init__(self, client_id, client_secret):
-        self.mendeley = Mendeley(os.environ.get('MENDELEY_CLIENT_ID'), os.environ.get('MENDELEY_CLIENT_SECRET'))
+    def __init__(self):
+        self.mendeley = Mendeley(config('MENDELEY_CLIENT_ID'), config('MENDELEY_CLIENT_SECRET'))
         self.session = self.mendeley.start_client_credentials_flow().authenticate()
 
     def retrieve_papers(self, query):

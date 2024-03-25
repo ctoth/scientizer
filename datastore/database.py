@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import os
+from decouple import config
 
 Base = declarative_base()
 
@@ -24,7 +24,7 @@ class ErrorScore(Base):
     created_at = Column(DateTime)
 
 # Create database engine and session
-engine = create_engine(os.environ.get('DATABASE_URL', 'postgresql://localhost/mydatabase'))
+engine = create_engine(config('DATABASE_URL', default='postgresql://localhost/mydatabase'))
 Session = sessionmaker(bind=engine)
 
 # Create tables in the database
