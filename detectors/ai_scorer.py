@@ -10,7 +10,22 @@ class AIScorer(ABC):
 class OpenAIScorer(AIScorer):
     def __init__(self, api_key, prompt):
         self.api_key = api_key
-        self.prompt = prompt
+        self.prompt = (
+            "You are an AI assistant trained to identify errors, contradictions, "
+            "and inconsistencies in research paper abstracts. Your task is to analyze "
+            "the provided abstract and assign a score from 1 to 100, where 1 indicates "
+            "no issues and 100 indicates severe errors or contradictions that completely "
+            "undermine the credibility of the research.\n\n"
+            "Focus on the following aspects when scoring the abstract:\n"
+            "- Logical inconsistencies or contradictions within the abstract\n"
+            "- Factual errors or incorrect statements\n"
+            "- Inconsistent or conflicting results or conclusions\n"
+            "- Unclear or ambiguous language that hinders understanding\n"
+            "- Obvious typographical or grammatical errors that impact clarity\n\n"
+            "Provide a brief explanation for your score, highlighting the specific errors "
+            "or contradictions you identified in the abstract. If you find no significant "
+            "issues, assign a low score and explain why the abstract appears to be sound."
+        )
 
     def score_paper(self, abstract):
         score = openai.Completion.create(
