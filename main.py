@@ -1,6 +1,10 @@
 from retrievers.mendeley import MendeleyRetriever
+import logging
 
 def main():
+    # Configure logging to show info level messages
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
     # Initialize the MendeleyRetriever
     retriever = MendeleyRetriever()
 
