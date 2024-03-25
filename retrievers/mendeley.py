@@ -18,9 +18,10 @@ class MendeleyRetriever:
                 for paper in papers.iter():
                     # Extract relevant metadata
                     title = paper.title
-                    authors = ', '.join([author.name for author in paper.authors])
+                    authors = ', '.join([f"{author.first_name} {author.last_name}" for author in paper.authors])
                     abstract = paper.abstract
                     altmetric_score = paper.scores.get('altmetric_score')
+                    ...
 
                     # Save the paper to the database
                     if abstract:  # Only process papers with an abstract
