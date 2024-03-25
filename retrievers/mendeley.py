@@ -4,6 +4,7 @@ from datastore.database import Session, Paper
 from decouple import config
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
+from .task_queue import process_paper
 
 class MendeleyRetriever:
     def __init__(self):
@@ -34,35 +35,11 @@ class MendeleyRetriever:
                     db_session.flush()  # Flush to assign an ID to new_paper
 
                     # Push the paper ID to the task queue for further processing
-                    task_queue.enqueue('process_paper', new_paper.id)
+                    process_paper.delay(new_paper.id)
 
                 db_session.commit()
         except SQLAlchemyError as e:
             print(f"An error occurred while saving papers: {e}")
-        for paper in papers.iter():
-            # Extract relevant metadata
-            title = paper.title
-            authors = ', '.join([author['name'] for author in paper.authors])
-            abstract = paper.abstract
-            altmetric_score = paper.scores.get('altmetric_score')
-
-            # Save the paper to the database
-            new_paper = Paper(
-                title=title,
-                authors=authors,
-                abstract=abstract,
-                altmetric_score=altmetric_score,
-                created_at=datetime.now(),
-                updated_at=datetime.now()
-            )
-            db_session.add(new_paper)
-
-            # Push the paper ID to the task queue for further processing
-            # This part is left as a placeholder for integration with a task queue system
-            # task_queue.enqueue('process_paper', new_paper.id)
-
-        db_session.commit()
-        db_session.close()
 
 # Example usage:
 # retriever = MendeleyRetriever()
