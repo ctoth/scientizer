@@ -1,19 +1,24 @@
-import unittest
+import pytest
 from retrievers.mendeley import MendeleyRetriever
 
-class TestMendeleyRetriever(unittest.TestCase):
+class TestMendeleyRetriever:
 
-    def test_retrieve_papers(self):
+    def test_retrieve_papers(self, mocker):
         # Initialize the MendeleyRetriever
         retriever = MendeleyRetriever()
 
         # Define the query for paper retrieval
         query = 'test query'
 
+        # Mock the Mendeley API response
+        mocker.patch('retrievers.mendeley.MendeleyRetriever._retrieve_from_mendeley', return_value=[])
+
         # Call the retrieve_papers method
         # This is a placeholder test that should be expanded upon
         # with mocks and assertions to verify the behavior
         retriever.retrieve_papers(query)
 
-if __name__ == '__main__':
-    unittest.main()
+        # Assertions will go here once the behavior is defined
+        # For example:
+        # assert some_condition, "Test failed because..."
+
