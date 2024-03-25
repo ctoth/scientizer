@@ -24,6 +24,7 @@ class MendeleyRetriever:
         try:
             with Session() as db_session:
                 for paper in papers.iter():
+                    logging.info(f"Processing paper: {paper.title}")
                     # Extract relevant metadata
                     title = paper.title
                     if not paper.authors:
