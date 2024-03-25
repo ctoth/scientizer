@@ -2,6 +2,7 @@ import requests
 from mendeley import Mendeley
 from datastore.database import Session, Paper
 from decouple import config
+from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 
 class MendeleyRetriever:
@@ -11,7 +12,33 @@ class MendeleyRetriever:
 
     def retrieve_papers(self, query):
         papers = self.session.catalog.search(query, view='bib')
-        db_session = Session()
+        try:
+            with Session() as db_session:
+                for paper in papers.iter():
+                    # Extract relevant metadata
+                    title = paper.title
+                    authors = ', '.join([author['name'] for author in paper.authors])
+                    abstract = paper.abstract
+                    altmetric_score = paper.scores.get('altmetric_score')
+
+                    # Save the paper to the database
+                    new_paper = Paper(
+                        title=title,
+                        authors=authors,
+                        abstract=abstract,
+                        altmetric_score=altmetric_score,
+                        created_at=datetime.now(),
+                        updated_at=datetime.now()
+                    )
+                    db_session.add(new_paper)
+                    db_session.flush()  # Flush to assign an ID to new_paper
+
+                    # Push the paper ID to the task queue for further processing
+                    task_queue.enqueue('process_paper', new_paper.id)
+
+                db_session.commit()
+        except SQLAlchemyError as e:
+            print(f"An error occurred while saving papers: {e}")
         for paper in papers.iter():
             # Extract relevant metadata
             title = paper.title
