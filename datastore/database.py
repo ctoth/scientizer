@@ -24,7 +24,7 @@ class ErrorScore(Base):
     created_at = Column(DateTime)
 
 # Create database engine and session
-engine = create_engine(config('DATABASE_URL', default='postgresql://localhost/mydatabase'))
+engine = create_engine(config('DATABASE_URL', default='sqlite:///mydatabase.db'))
 Session = sessionmaker(bind=engine)
 
 # Create tables in the database
