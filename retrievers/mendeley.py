@@ -20,7 +20,6 @@ class MendeleyRetriever:
                     title = paper.title
                     authors = ', '.join([f"{author.first_name} {author.last_name}" for author in paper.authors])
                     abstract = paper.abstract
-                    altmetric_score = paper.scores.get('altmetric_score')
                     ...
 
                     # Save the paper to the database
@@ -29,6 +28,7 @@ class MendeleyRetriever:
                         title=title,
                         authors=authors,
                         abstract=abstract,
+                        altmetric_score=None,
                         altmetric_score=None,
                         created_at=datetime.now(),
                         updated_at=datetime.now()
