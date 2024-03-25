@@ -23,7 +23,8 @@ class MendeleyRetriever:
                     altmetric_score = paper.scores.get('altmetric_score')
 
                     # Save the paper to the database
-                    new_paper = Paper(
+                    if abstract:  # Only process papers with an abstract
+                        new_paper = Paper(
                         title=title,
                         authors=authors,
                         abstract=abstract,
@@ -31,11 +32,11 @@ class MendeleyRetriever:
                         created_at=datetime.now(),
                         updated_at=datetime.now()
                     )
-                    db_session.add(new_paper)
-                    db_session.flush()  # Flush to assign an ID to new_paper
+                        db_session.add(new_paper)
+                        db_session.flush()  # Flush to assign an ID to new_paper
 
-                    # Push the paper ID to the task queue for further processing
-                    process_paper.delay(new_paper.id)
+                        # Push the paper ID to the task queue for further processing
+                        process_paper.delay(new_paper.id)
 
                 db_session.commit()
         except SQLAlchemyError as e:
