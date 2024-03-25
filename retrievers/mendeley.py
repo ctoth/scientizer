@@ -29,7 +29,7 @@ class MendeleyRetriever:
                         title=title,
                         authors=authors,
                         abstract=abstract,
-                        altmetric_score=altmetric_score,
+                        altmetric_score=None,
                         created_at=datetime.now(),
                         updated_at=datetime.now()
                     )
