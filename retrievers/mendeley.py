@@ -26,8 +26,10 @@ class MendeleyRetriever:
                 for paper in papers.iter():
                     # Extract relevant metadata
                     title = paper.title
-                    authors = ', '.join(
-                        [f"{author.first_name} {author.last_name}" for author in paper.authors])
+                    if not paper.authors:
+                        logging.info(f"Skipping paper without authors: {title}")
+                        continue
+                    authors = ', '.join([f"{author.first_name} {author.last_name}" for author in paper.authors])
                     abstract = paper.abstract
                     ...
 
