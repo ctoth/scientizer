@@ -5,7 +5,7 @@ from detectors.ai_scorer import AIScorer, OpenAIScorer, AnthropicScorer
 from datetime import datetime
 
 # Initialize Celery
-app = Celery('task_queue', broker=config('CELERY_BROKER_URL', default='redis://localhost:6379/0'))
+app = Celery('task_queue', broker='sqla+sqlite:///celerydb.sqlite', backend='db+sqlite:///celery_results.sqlite')
 
 @app.task
 def process_paper(paper_id):
