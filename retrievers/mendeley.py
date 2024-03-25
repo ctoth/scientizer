@@ -7,6 +7,11 @@ from datetime import datetime
 from .task_queue import process_paper
 
 
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 class MendeleyRetriever:
     def __init__(self):
         self.mendeley = Mendeley(
@@ -14,6 +19,7 @@ class MendeleyRetriever:
         self.session = self.mendeley.start_client_credentials_flow().authenticate()
 
     def retrieve_papers(self, query):
+        logging.info(f"Starting retrieval of papers for query: {query}")
         papers = self.session.catalog.search(query, view='bib')
         try:
             with Session() as db_session:
@@ -41,9 +47,10 @@ class MendeleyRetriever:
                         # Push the paper ID to the task queue for further processing
                         process_paper.delay(new_paper.id)
 
+                logging.info("Successfully saved all retrieved papers to the database.")
                 db_session.commit()
         except SQLAlchemyError as e:
-            print(f"An error occurred while saving papers: {e}")
+            logging.error(f"An error occurred while saving papers: {e}")
 
 # Example usage:
 # retriever = MendeleyRetriever()
