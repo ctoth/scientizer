@@ -5,6 +5,7 @@ from decouple import config
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 from .tasks import score_paper
+from concurrent.futures import ThreadPoolExecutor
 
 
 import logging
@@ -23,6 +24,7 @@ class MendeleyRetriever:
     def retrieve_papers(self, query):
         logging.info(f"Starting retrieval of papers for query: {query}")
         papers = self.session.catalog.search(query, view='bib')
+        executor = ThreadPoolExecutor(max_workers=5)
         try:
             with Session() as db_session:
                 for paper in papers.iter():
@@ -51,11 +53,15 @@ class MendeleyRetriever:
                         db_session.flush()  # Flush to assign an ID to new_paper
 
 
-                        # Push the paper ID to the task queue for further processing
-                        score_paper.delay(new_paper.id)
+                        # Asynchronously enqueue the scoring task
+                        executor.submit(score_paper.delay, new_paper.id)
 
                 logging.info("Successfully saved all retrieved papers to the database.")
                 db_session.commit()
+        except SQLAlchemyError as e:
+            logging.error(f"An error occurred while saving papers: {e}")
+        finally:
+            executor.shutdown(wait=False)
         except SQLAlchemyError as e:
             logging.error(f"An error occurred while saving papers: {e}")
 
