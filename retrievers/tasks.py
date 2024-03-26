@@ -1,10 +1,12 @@
 import logging.config
 from datetime import datetime
 
+from decouple import config
 
 from datastore.database import ErrorScore, Paper, Session
 from detectors.ai_scorer import AnthropicScorer, OpenAIScorer
-from ..tasks import app
+
+from .celery import app
 
 logging_config = {
     'version': 1,
