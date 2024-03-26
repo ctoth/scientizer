@@ -2,7 +2,7 @@ from celery import Celery
 from detectors.ai_scorer import OpenAIScorer, AnthropicScorer
 from datastore.database import Session, Paper, ErrorScore
 from datetime import datetime
-import logging
+import logging.config
 
 # Initialize Celery
 app = Celery('tasks', broker='your_broker_url')
