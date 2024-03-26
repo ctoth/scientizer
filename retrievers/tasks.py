@@ -6,11 +6,11 @@ from datetime import datetime
 import logging.config
 
 # Initialize Celery
-app = Celery('tasks', broker=config('CELERY_BROKER_URL', default='sqla+sqlite:///celerydb.sqlite'))
+app = Celery('tasks', broker=config('CELERY_BROKER_URL',
+             default='sqla+sqlite:///celerydb.sqlite'))
 
 logging.config.dictConfig({
     'version': 1,
-    ...
     'disable_existing_loggers': False,
     'formatters': {
         'standard': {
@@ -36,6 +36,7 @@ logging.config.dictConfig({
 logging.info(f"Celery is configured with broker: {app.conf.broker_url}")
 logging.info(f"Registered tasks: {app.tasks.keys()}")
 
+
 @app.task
 def score_paper(paper_id):
     # Task implementation remains the same
@@ -44,13 +45,15 @@ def score_paper(paper_id):
         if not paper:
             logging.error(f"Paper with ID {paper_id} not found.")
             return
-        logging.info(f"Retrieved paper with ID {paper_id} for scoring: {paper.title}")
+        logging.info(
+            f"Retrieved paper with ID {paper_id} for scoring: {paper.title}")
         # Initialize the AI scorer (replace with actual implementation)
         scorer = OpenAIScorer(api_key='your_api_key', prompt='your_prompt')
         try:
             score, explanation = scorer.score_paper(paper.abstract)
             logging.info(f"Scoring paper with ID {paper_id}: {paper.title}")
-            logging.info(f"Scored paper with ID {paper_id}: Score - {score}, Explanation - {explanation}")
+            logging.info(
+                f"Scored paper with ID {paper_id}: Score - {score}, Explanation - {explanation}")
         except Exception as e:
             # If an error occurs during scoring, log the error and exit the function
             logging.error(f"Error scoring paper with ID {paper_id}: {e}")
