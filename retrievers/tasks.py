@@ -80,8 +80,9 @@ def score_abstract(abstract):
         logging.info(f"Scoring abstract: {abstract[:30]}...")
         logging.info(
             f"Scored abstract: Score - {score}, Explanation - {explanation}")
+        return None, None, None  # Return None values to indicate failure
     except Exception as e:
         # If an error occurs during scoring, log the error and exit the function
         logging.error(f"Error scoring abstract: {e}")
         return None, None, None  # Return None values to indicate failure
-        return score, explanation, scorer_type
+        return None, None, None  # Return None values to indicate failure

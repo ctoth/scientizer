@@ -11,7 +11,7 @@ def test_test_score_function(mocker):
 
     title = "Test Title"
     abstract = "This is a test abstract for a research paper."
-    score, explanation = test_score(title, abstract)
+    score, explanation = OpenAIScorer(api_key="test_api_key").score_paper(abstract)
 
     assert score == 42
     assert explanation == "Test explanation"

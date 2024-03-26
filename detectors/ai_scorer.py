@@ -62,7 +62,7 @@ class OpenAIScorer(AIScorer):
         return (response['choices'][0]['text'].strip(), explanation)
 
 class AnthropicScorer(AIScorer):
-    def __init__(self, api_key, prompt):
+    def __init__(self, api_key, prompt=None):
         self.api_key = api_key
         self.prompt = AIScorer.prompt  # Use the base class prompt by default
 
