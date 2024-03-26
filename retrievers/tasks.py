@@ -1,4 +1,5 @@
 from celery import Celery
+from decouple import config
 from detectors.ai_scorer import OpenAIScorer, AnthropicScorer
 from datastore.database import Session, Paper, ErrorScore
 from datetime import datetime
@@ -9,6 +10,7 @@ app = Celery('tasks', broker=config('CELERY_BROKER_URL', default='sqla+sqlite://
 
 logging.config.dictConfig({
     'version': 1,
+    ...
     'disable_existing_loggers': False,
     'formatters': {
         'standard': {
