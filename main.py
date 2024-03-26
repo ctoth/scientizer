@@ -1,6 +1,7 @@
 from retrievers.mendeley import MendeleyRetriever
 from retrievers.tasks import app as celery_app
 import logging
+import sys
 
 def main():
     # Configure logging to show info level messages
@@ -20,11 +21,14 @@ def main():
     # Initialize the MendeleyRetriever
     retriever = MendeleyRetriever()
 
-    # Define the query for paper retrieval
-    query = 'machine learning'
+    # Get the topic from command-line arguments
+    if len(sys.argv) < 2:
+        logging.error("No topic specified. Usage: python main.py <topic>")
+        return
+    topic = sys.argv[1]
 
     # Start the paper retrieval process
-    retriever.retrieve_papers(query)
+    retriever.retrieve_papers(topic)
 
 if __name__ == '__main__':
     main()

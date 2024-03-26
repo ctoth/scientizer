@@ -24,12 +24,12 @@ class MendeleyRetriever:
             config('MENDELEY_CLIENT_ID'), config('MENDELEY_CLIENT_SECRET'))
         self.session = self.mendeley.start_client_credentials_flow().authenticate()
 
-    def retrieve_papers(self, query):
+    def retrieve_papers(self, topic):
         num_workers = os.cpu_count()  # Default to the number of CPUs
         max_workers = config('THREAD_POOL_MAX_WORKERS',
                              default=num_workers, cast=int)
-        logging.info(f"Starting retrieval of papers for query: {query}")
-        papers = self.session.catalog.search(query, view='bib')
+        logging.info(f"Starting retrieval of papers for topic: {topic}")
+        papers = self.session.catalog.search(topic, view='bib')
         executor = ThreadPoolExecutor(max_workers=max_workers)
         try:
             with Session() as db_session:
