@@ -13,17 +13,18 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 def score_paper(paper_id):
     with Session() as db_session:
         paper = db_session.query(Paper).get(paper_id)
-        if paper:
-            logging.info(f"Scoring paper with ID {paper_id}: {paper.title}")
-            # Initialize the AI scorer (replace with actual implementation)
-            scorer = OpenAIScorer(api_key='your_api_key', prompt='your_prompt')
+        if not paper:
+            logging.error(f"Paper with ID {paper_id} not found.")
+        logging.info(f"Scoring paper with ID {paper_id}: {paper.title}")
+        # Initialize the AI scorer (replace with actual implementation)
+        scorer = OpenAIScorer(api_key='your_api_key', prompt='your_prompt')
+        score, explanation = scorer.score_paper(paper.abstract)
+        try:
             score, explanation = scorer.score_paper(paper.abstract)
-            try:
-                score, explanation = scorer.score_paper(paper.abstract)
-                logging.info(f"Scored paper with ID {paper_id}: Score - {score}, Explanation - {explanation}")
-            except Exception as e:
-                logging.error(f"Error scoring paper with ID {paper_id}: {e}")
-                return
+            logging.info(f"Scored paper with ID {paper_id}: Score - {score}, Explanation - {explanation}")
+        except Exception as e:
+            logging.error(f"Error scoring paper with ID {paper_id}: {e}")
+            return
 
             # Store the score in the ErrorScore table
             error_score = ErrorScore(
