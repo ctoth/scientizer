@@ -8,8 +8,8 @@ Base = declarative_base()
 class Paper(Base):
     __tablename__ = 'papers'
     id = Column(Integer, primary_key=True)
-    title = Column(String(255))
-    authors = Column(Text)
+    title = Column(String(255), index=True)
+    authors = Column(Text, index=True)
     abstract = Column(Text)
     altmetric_score = Column(Integer)
     created_at = Column(DateTime)
@@ -18,7 +18,7 @@ class Paper(Base):
 class ErrorScore(Base):
     __tablename__ = 'error_scores'
     id = Column(Integer, primary_key=True)
-    paper_id = Column(Integer, ForeignKey('papers.id'))
+    paper_id = Column(Integer, ForeignKey('papers.id'), index=True)
     score = Column(Integer)
     explanation = Column(Text)
     scorer = Column(String(255))
