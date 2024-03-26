@@ -24,6 +24,29 @@ class AIScorer(ABC):
     def score_paper(self, abstract):
         pass
 
+def test_score(title, abstract):
+    """
+    Test the scoring of a paper's title and abstract using the configured AI scorer.
+
+    :param title: The title of the paper.
+    :param abstract: The abstract of the paper.
+    :return: A tuple containing the score and explanation.
+    """
+    # Initialize the AI scorer with the correct API key from environment variables
+    scorer_type = config('SCORER_TYPE', default='OpenAI')
+    api_key = config('SCORER_API_KEY')
+    if scorer_type == 'OpenAI':
+        scorer = OpenAIScorer(api_key=api_key)
+    elif scorer_type == 'Anthropic':
+        scorer = AnthropicScorer(api_key=api_key)
+    else:
+        raise ValueError(f"Invalid scorer type: {scorer_type}")
+
+    # Combine the title and abstract for scoring
+    full_text = f"Title: {title}\n\nAbstract:\n{abstract}"
+    score, explanation = scorer.score_paper(full_text)
+    return score, explanation
+
 class OpenAIScorer(AIScorer):
     def __init__(self, api_key):
         self.api_key = api_key

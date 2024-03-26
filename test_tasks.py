@@ -2,6 +2,19 @@ import pytest
 from retrievers.tasks import score_abstract
 from detectors.ai_scorer import OpenAIScorer, AnthropicScorer
 
+def test_test_score_function(mocker):
+    # Mock the OpenAIScorer to return a dummy score and explanation
+    mocker.patch('detectors.ai_scorer.OpenAIScorer.score_paper', return_value=(42, "Test explanation"))
+    # Set the SCORER_TYPE to use the OpenAI scorer for this test
+    mocker.patch('detectors.ai_scorer.config', return_value='OpenAI')
+
+    title = "Test Title"
+    abstract = "This is a test abstract for a research paper."
+    score, explanation = test_score(title, abstract)
+
+    assert score == 42
+    assert explanation == "Test explanation"
+
 @pytest.fixture
 def abstract():
     return "This is a test abstract for a research paper."
