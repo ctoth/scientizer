@@ -16,12 +16,12 @@ def score_paper(paper_id):
         if not paper:
             logging.error(f"Paper with ID {paper_id} not found.")
             return
-        logging.info(f"Starting to score paper with ID {paper_id}: {paper.title}")
-        logging.info(f"Scoring paper with ID {paper_id}: {paper.title}")
+        logging.info(f"Retrieved paper with ID {paper_id} for scoring: {paper.title}")
         # Initialize the AI scorer (replace with actual implementation)
         scorer = OpenAIScorer(api_key='your_api_key', prompt='your_prompt')
         try:
             score, explanation = scorer.score_paper(paper.abstract)
+            logging.info(f"Scoring paper with ID {paper_id}: {paper.title}")
             logging.info(f"Scored paper with ID {paper_id}: Score - {score}, Explanation - {explanation}")
         except Exception as e:
             # If an error occurs during scoring, log the error and exit the function
@@ -39,4 +39,5 @@ def score_paper(paper_id):
         )
         db_session.add(error_score)
         db_session.commit()
+        logging.info(f"Successfully stored score for paper with ID {paper_id}")
         logging.info(f"Successfully stored score for paper with ID {paper_id}")
