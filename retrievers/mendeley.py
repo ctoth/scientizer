@@ -60,8 +60,8 @@ class MendeleyRetriever:
                         db_session.add(new_paper)
                         db_session.flush()  # Flush to assign an ID to new_paper
 
-                        # Asynchronously enqueue the scoring task
-                        executor.submit(score_paper.delay, new_paper.id)
+                        # Asynchronously enqueue the scoring task using Celery
+                        score_paper.delay(new_paper.id)
 
                 logging.info(
                     "Successfully saved all retrieved papers to the database.")

@@ -7,10 +7,33 @@ import logging
 # Initialize Celery
 app = Celery('tasks', broker='your_broker_url')
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', handlers=[logging.StreamHandler()])
+logging.config.dictConfig({
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s - %(levelname)s - %(message)s'
+        },
+    },
+    'handlers': {
+        'default': {
+            'level': 'INFO',
+            'formatter': 'standard',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': True
+        }
+    }
+})
 
 @app.task
 def score_paper(paper_id):
+    # Task implementation remains the same
     with Session() as db_session:
         paper = db_session.query(Paper).get(paper_id)
         if not paper:
