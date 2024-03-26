@@ -59,7 +59,7 @@ def score_paper(paper_id):
         )
         db_session.add(error_score)
         db_session.commit()
-        logging.info(f"Successfully stored score for paper with ID {paper_id}")
+    logging.info(f"Successfully stored score for paper with ID {paper_id}")
 
 def score_abstract(abstract):
     # Initialize the AI scorer with the correct API key from environment variables
