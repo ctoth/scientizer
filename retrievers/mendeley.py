@@ -4,7 +4,7 @@ from datastore.database import Session, Paper
 from decouple import config
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
-from .task_queue import process_paper
+from .tasks import score_paper
 
 
 import logging
@@ -52,7 +52,7 @@ class MendeleyRetriever:
 
 
                         # Push the paper ID to the task queue for further processing
-                        process_paper.delay(new_paper.id)
+                        score_paper.delay(new_paper.id)
 
                 logging.info("Successfully saved all retrieved papers to the database.")
                 db_session.commit()
