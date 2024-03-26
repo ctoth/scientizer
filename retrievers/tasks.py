@@ -31,6 +31,9 @@ logging.config.dictConfig({
     }
 })
 
+logging.info(f"Celery is configured with broker: {app.conf.broker_url}")
+logging.info(f"Registered tasks: {app.tasks.keys()}")
+
 @app.task
 def score_paper(paper_id):
     # Task implementation remains the same
