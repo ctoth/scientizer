@@ -1,3 +1,5 @@
+from datastore.database import ErrorScore
+from detectors.ai_scorer import OpenAIScorer, AnthropicScorer
 import requests
 from mendeley import Mendeley
 from datastore.database import Session, Paper
@@ -12,9 +14,9 @@ import os
 import logging
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-from detectors.ai_scorer import OpenAIScorer, AnthropicScorer
-from datastore.database import ErrorScore
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 class MendeleyRetriever:
     def __init__(self):
@@ -24,7 +26,8 @@ class MendeleyRetriever:
 
     def retrieve_papers(self, query):
         num_workers = os.cpu_count()  # Default to the number of CPUs
-        max_workers = config('THREAD_POOL_MAX_WORKERS', default=num_workers, cast=int)
+        max_workers = config('THREAD_POOL_MAX_WORKERS',
+                             default=num_workers, cast=int)
         logging.info(f"Starting retrieval of papers for query: {query}")
         papers = self.session.catalog.search(query, view='bib')
         executor = ThreadPoolExecutor(max_workers=max_workers)
@@ -35,9 +38,11 @@ class MendeleyRetriever:
                     # Extract relevant metadata
                     title = paper.title
                     if not paper.authors:
-                        logging.info(f"Skipping paper without authors: {title}")
+                        logging.info(
+                            f"Skipping paper without authors: {title}")
                         continue
-                    authors = ', '.join([f"{author.first_name} {author.last_name}" for author in paper.authors])
+                    authors = ', '.join(
+                        [f"{author.first_name} {author.last_name}" for author in paper.authors])
                     abstract = paper.abstract
                     ...
 
@@ -55,18 +60,16 @@ class MendeleyRetriever:
                         db_session.add(new_paper)
                         db_session.flush()  # Flush to assign an ID to new_paper
 
-
                         # Asynchronously enqueue the scoring task
                         executor.submit(score_paper.delay, new_paper.id)
 
-                logging.info("Successfully saved all retrieved papers to the database.")
+                logging.info(
+                    "Successfully saved all retrieved papers to the database.")
                 db_session.commit()
         except SQLAlchemyError as e:
             logging.error(f"An error occurred while saving papers: {e}")
         finally:
             executor.shutdown(wait=False)
-        except SQLAlchemyError as e:
-            logging.error(f"An error occurred while saving papers: {e}")
 
 # Example usage:
 # retriever = MendeleyRetriever()
