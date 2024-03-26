@@ -64,7 +64,7 @@ class OpenAIScorer(AIScorer):
 class AnthropicScorer(AIScorer):
     def __init__(self, api_key, prompt):
         self.api_key = api_key
-        self.prompt = prompt
+        self.prompt = AIScorer.prompt  # Use the base class prompt by default
 
     def score_paper(self, abstract):
         # Placeholder for Anthropic API call, as the actual API details are not provided

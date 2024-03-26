@@ -83,5 +83,5 @@ def score_abstract(abstract):
     except Exception as e:
         # If an error occurs during scoring, log the error and exit the function
         logging.error(f"Error scoring abstract: {e}")
-        raise  # Re-raise the exception to ensure it's captured by the Celery worker
+        return None, None, None  # Return None values to indicate failure
         return score, explanation, scorer_type

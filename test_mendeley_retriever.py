@@ -11,7 +11,7 @@ class TestMendeleyRetriever:
         query = 'test query'
 
         # Mock the Mendeley API response
-        mocker.patch('retrievers.mendeley.MendeleyRetriever._retrieve_from_mendeley', return_value=[])
+        mocker.patch('retrievers.mendeley.Mendeley.session.catalog.search', return_value=[])
 
         # Call the retrieve_papers method
         # This is a placeholder test that should be expanded upon
