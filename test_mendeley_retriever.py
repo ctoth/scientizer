@@ -16,11 +16,6 @@ class TestMendeleyRetriever:
         # Call the retrieve_papers method
         retriever.retrieve_papers(query)
 
-        # Call the retrieve_papers method
-        # This is a placeholder test that should be expanded upon
-        # with mocks and assertions to verify the behavior
-        retriever.retrieve_papers(query)
-
         # Assertions will go here once the behavior is defined
         # For example:
         # assert some_condition, "Test failed because..."
