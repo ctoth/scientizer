@@ -61,6 +61,7 @@ def score_paper(paper_id):
         db_session.commit()
     logging.info(f"Successfully stored score for paper with ID {paper_id}")
 
+
 def score_abstract(abstract):
     # Initialize the AI scorer with the correct API key from environment variables
     # The scorer used can be configured via an environment variable
@@ -75,11 +76,12 @@ def score_abstract(abstract):
         raise ValueError(f"Invalid scorer type: {scorer_type}")
     try:
         score, explanation = scorer.score_paper(abstract)
-        logging.info(f"Scoring abstract: {abstract[:30]}...")  # Log the beginning of the abstract
-        logging.info(f"Scored abstract: Score - {score}, Explanation - {explanation}")
+        # Log the beginning of the abstract
+        logging.info(f"Scoring abstract: {abstract[:30]}...")
+        logging.info(
+            f"Scored abstract: Score - {score}, Explanation - {explanation}")
     except Exception as e:
         # If an error occurs during scoring, log the error and exit the function
         logging.error(f"Error scoring abstract: {e}")
         raise  # Re-raise the exception to ensure it's captured by the Celery worker
-    return score, explanation, scorer_type
-        logging.info(f"Successfully stored score for paper with ID {paper_id}")
+        return score, explanation, scorer_type
