@@ -1,13 +1,10 @@
-from celery import Celery
-from decouple import config
-from detectors.ai_scorer import OpenAIScorer, AnthropicScorer
-from datastore.database import Session, Paper, ErrorScore
-from datetime import datetime
 import logging.config
+from datetime import datetime
 
-# Initialize Celery
-app = Celery('tasks', broker=config('CELERY_BROKER_URL',
-             default='sqla+sqlite:///celerydb.sqlite'))
+
+from datastore.database import ErrorScore, Paper, Session
+from detectors.ai_scorer import AnthropicScorer, OpenAIScorer
+from ..tasks import app
 
 logging.config.dictConfig({
     'version': 1,
@@ -39,7 +36,6 @@ logging.info(f"Registered tasks: {app.tasks.keys()}")
 
 @app.task
 def score_paper(paper_id):
-    # Task implementation remains the same
     with Session() as db_session:
         paper = db_session.query(Paper).get(paper_id)
         if not paper:
