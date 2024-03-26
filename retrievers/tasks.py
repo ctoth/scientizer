@@ -5,7 +5,7 @@ from datetime import datetime
 import logging.config
 
 # Initialize Celery
-app = Celery('tasks', broker='your_broker_url')
+app = Celery('tasks', broker=config('CELERY_BROKER_URL', default='redis://localhost:6379/0'))
 
 logging.config.dictConfig({
     'version': 1,
