@@ -21,6 +21,7 @@ class ErrorScore(Base):
     paper_id = Column(Integer, ForeignKey('papers.id'))
     score = Column(Integer)
     explanation = Column(Text)
+    scorer = Column(String(255))
     created_at = Column(DateTime)
 
 # Create database engine and session
