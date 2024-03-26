@@ -16,16 +16,17 @@ def score_paper(paper_id):
         if not paper:
             logging.error(f"Paper with ID {paper_id} not found.")
             return
+        logging.info(f"Starting to score paper with ID {paper_id}: {paper.title}")
         logging.info(f"Scoring paper with ID {paper_id}: {paper.title}")
         # Initialize the AI scorer (replace with actual implementation)
         scorer = OpenAIScorer(api_key='your_api_key', prompt='your_prompt')
-        score, explanation = scorer.score_paper(paper.abstract)
         try:
             score, explanation = scorer.score_paper(paper.abstract)
             logging.info(f"Scored paper with ID {paper_id}: Score - {score}, Explanation - {explanation}")
         except Exception as e:
             # If an error occurs during scoring, log the error and exit the function
             logging.error(f"Error scoring paper with ID {paper_id}: {e}")
+            raise  # Re-raise the exception to ensure it's captured by the Celery worker
             return
 
         # If the score is successfully generated, store it in the ErrorScore table
