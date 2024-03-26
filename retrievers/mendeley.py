@@ -6,6 +6,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 from .tasks import score_paper
 from concurrent.futures import ThreadPoolExecutor
+import os
 
 
 import logging
@@ -22,9 +23,11 @@ class MendeleyRetriever:
         self.session = self.mendeley.start_client_credentials_flow().authenticate()
 
     def retrieve_papers(self, query):
+        num_workers = os.cpu_count()  # Default to the number of CPUs
+        max_workers = config('THREAD_POOL_MAX_WORKERS', default=num_workers, cast=int)
         logging.info(f"Starting retrieval of papers for query: {query}")
         papers = self.session.catalog.search(query, view='bib')
-        executor = ThreadPoolExecutor(max_workers=5)
+        executor = ThreadPoolExecutor(max_workers=max_workers)
         try:
             with Session() as db_session:
                 for paper in papers.iter():
