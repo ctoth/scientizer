@@ -9,10 +9,19 @@ Phase 1: Core System Development
      - `datastore`: Package for database and data storage modules.
      - `detectors`: Package for AI scoring modules.
      - `rankers`: Package for paper ranking modules.
-     - `ui`: Package for user interface modules.
+     - `ui`: Package for user interface modules (planned but not yet implemented).
 
 1.2 Retrievers Package:
-   - Implement the Mendeley retriever module (`mendeley.py`):
+   - Implemented the MendeleyRetriever class in `mendeley.py` which handles authentication with the Mendeley API, searches for papers based on a query, and stores the retrieved papers in the database. It also enqueues tasks for scoring papers using Celery.
+
+1.3 Datastore Package:
+   - Designed and implemented the database schema with `papers` and `error_scores` tables in `database.py`. The schema includes fields for paper metadata, error scores, explanations, and timestamps.
+
+1.4 Detectors Package:
+   - Created the `AIScorer` abstract base class and implemented the `OpenAIScorer` and `AnthropicScorer` classes in `ai_scorer.py`. These classes are responsible for scoring papers using AI models from OpenAI and Anthropic (placeholder implementation).
+
+1.5 Rankers Package:
+   - Implemented the `rank_papers_by_error_score` function in `paper_ranker.py` which ranks papers based on their error scores retrieved from the database.
      ```python
      import requests
      from mendeley import Mendeley
@@ -141,44 +150,44 @@ Phase 1: Core System Development
      ```
 
 1.6 User Interface:
-   - Design and implement the web application using a web framework like Flask or Django.
+   - The design and implementation of the web application using a web framework like Flask or Django is planned but not yet implemented.
    - Create views and templates for displaying ranked papers, search functionality, and user authentication.
 
 Phase 2: Integration and Testing
 2.1 Integration:
-   - Integrate the retriever, datastore, extractor, detector, and ranker modules into the main application.
-   - Implement a distributed task queue using Celery and RabbitMQ for asynchronous processing of papers.
-   - Use Redis for caching and storing intermediate results.
+   - Integrated the retriever, datastore, and detector modules into the main application. The ranker module is implemented but not yet integrated. The extractor module is not applicable as abstracts are directly retrieved from the Mendeley API.
+   - Implemented a distributed task queue using Celery for asynchronous processing of scoring tasks.
+   - The use of Redis for caching and storing intermediate results is planned but not yet implemented.
 
 2.2 API Endpoints:
-   - Implement RESTful API endpoints for paper retrieval, scoring, and ranking.
+   - The implementation of RESTful API endpoints for paper retrieval, scoring, and ranking is planned but not yet implemented.
    - Define request and response formats using JSON.
    - Implement authentication and authorization for API access.
 
 2.3 Testing:
-   - Develop unit tests for each module using testing frameworks like pytest or unittest.
+   - Developed unit tests for the `tasks.py` and `ai_scorer.py` modules using pytest. Additional tests are needed for complete coverage.
    - Write integration tests to verify the interaction between components.
    - Perform load testing to ensure the system can handle a high volume of requests.
    - Conduct user acceptance testing with a group of researchers and gather feedback.
 
 Phase 3: Deployment and Maintenance
 3.1 Production Environment Setup:
-   - Set up the production environment, including server configuration and database setup.
-   - Use containerization technologies like Docker for easy deployment and scalability.
+   - The setup of the production environment, including server configuration and database setup, is planned but not yet implemented.
+   - The use of containerization technologies like Docker for easy deployment and scalability is planned but not yet implemented.
 
 3.2 Deployment:
-   - Deploy the scientizer system to the production environment.
-   - Automate the deployment process using tools like Ansible or Kubernetes.
-   - Implement continuous integration and continuous deployment (CI/CD) pipelines.
+   - The deployment of the scientizer system to the production environment is planned but not yet implemented.
+   - The automation of the deployment process using tools like Ansible or Kubernetes is planned but not yet implemented.
+   - The implementation of continuous integration and continuous deployment (CI/CD) pipelines is planned but not yet implemented.
 
 3.3 Monitoring and Logging:
-   - Implement monitoring and logging mechanisms to track system performance and identify issues.
-   - Use tools like Prometheus and Grafana for collecting and visualizing metrics.
-   - Set up log aggregation and analysis using ELK stack (Elasticsearch, Logstash, Kibana).
+   - Implemented logging throughout the system to track operations and errors. Monitoring mechanisms are planned but not yet implemented.
+   - The use of tools like Prometheus and Grafana for collecting and visualizing metrics is planned but not yet implemented.
+   - The setup of log aggregation and analysis using ELK stack (Elasticsearch, Logstash, Kibana) is planned but not yet implemented.
 
 3.4 Maintenance:
-   - Establish a maintenance plan, including regular backups, software updates, and security patches.
-   - Monitor and address security vulnerabilities and performance bottlenecks.
+   - Establishing a maintenance plan, including regular backups, software updates, and security patches, is planned but not yet implemented.
+   - Monitoring and addressing security vulnerabilities and performance bottlenecks is planned but not yet implemented.
 
 This build plan provides a focused and technical overview of the scientizer system implementation. It includes the project structure, key components, database schemas, AI scoring prompt, and code outlines for critical modules. The plan emphasizes the distributed nature of the system, utilizing technologies like task queues, caching, and containerization for scalability and performance.
 
